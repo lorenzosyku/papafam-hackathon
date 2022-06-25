@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import Header from "../components/Header"
+import TotalBalance from "../components/TotalBalance"
 
 
 const Home: NextPage = () => {
@@ -8,8 +9,12 @@ const Home: NextPage = () => {
   if (session) {
     return (
       <>
-        <div className="">
+        <div className="bg-gray-200 min-h-screen space-y-5">
           <Header session={session}/>
+          <div className="w-full flex items-center justify-center">
+            <TotalBalance />
+          </div>
+          
         </div>
       </>
     );

@@ -4,7 +4,7 @@ import Avatar from "boring-avatars";
 
 function Header({ session }) {
   return (
-    <div className="flex items-center justify-between p-3 shadow-sm">
+    <div className="flex items-center justify-between p-3 shadow-sm bg-slate-100">
       <div className="">
         <h2 className="font-poppins text-xl text-shade-lightblue italic font-semibold">
           <span className="text-indigo-400">PPF</span>
