@@ -73,8 +73,8 @@ const Home = () => {
   }
   return (
     <>
-      <div className="h-screen flex items-center justify-center">
-        <button onClick={() => signIn()}>Sign in</button>
+      <div className="h-screen flex items-center justify-center bg-slate-900">
+        <button className="text-3xl text-slate-200 border rounded-md p-5 hover:bg-gray-50 hover:scale-105 transition transform duration-200 ease-out max-w-2xl mx-auto hover:text-stone-800" onClick={() => signIn()}>Continue to Login...</button>
       </div>
     </>
   );

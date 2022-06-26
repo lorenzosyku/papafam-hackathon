@@ -27,7 +27,7 @@ function DataInput() {
     <div className="flex w-full md:w-1/3 justify-center">
       <div className="flex bg-black opacity-80 px-6 py-4 w-11/12 max-w-2xl shadow-xl border-4 border-blue-400 relative-group rounded-full">
         <form onSubmit={handleSubmit} className="md:flex">
-          <div className="space-y-3">
+          <div className="space-y-3 flex-grow">
             <input
               type="text"
               ref={amountRef}
