@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { ChevronDoubleRightIcon } from "@heroicons/react/solid";
 import { v4 as uuidv4 } from "uuid";
 import { addDoc, collection } from "@firebase/firestore";
@@ -12,15 +12,9 @@ function DataInput() {
     e.preventDefault();
     if (amountRef.current.value === "" || reasonRef.current.value === "")
       return;
-    // if (
-    //   transaction.balance + transaction.amountRef.current.value <
-    //   transaction.balance
-    // )
-    //   return;
 
     await addDoc(collection(db, "transactions"), {
       amount: parseFloat(amountRef.current.value),
-      balance: 12345,
       reason: reasonRef.current.value,
       id: uuidv4(),
       timeStamp: Date.now(),
@@ -28,10 +22,11 @@ function DataInput() {
     amountRef.current.value = "";
     reasonRef.current.value = "";
   };
+
   return (
     <div className="flex w-full md:w-1/3 justify-center">
       <div className="flex bg-black opacity-80 px-6 py-4 w-11/12 max-w-2xl shadow-xl border-4 border-blue-400 relative-group rounded-full">
-        <form onSubmit={handleSubmit} className="flex">
+        <form onSubmit={handleSubmit} className="md:flex">
           <div className="space-y-3">
             <input
               type="text"

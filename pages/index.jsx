@@ -1,24 +1,49 @@
-//import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import Header from "../components/Header";
 import TotalBalance from "../components/TotalBalance";
 import DataInput from "../components/DataInput";
-import { v4 as uuidv4 } from "uuid";
 import Transactions from "../components/Transactions";
-import { useEffect, useState } from "react";
-import {
-  collection,
-  onSnapshot,
-  addDoc,
-  doc,
-  deleteDoc,
-  updateDoc,
-  setDoc,
-} from "firebase/firestore";
+import dynamic from "next/dynamic";
+import { collection, onSnapshot } from "@firebase/firestore";
 import { db } from "../firebase";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const { data: session } = useSession();
+
+  const Graph = dynamic(() => import("../components/Graph"), { ssr: false });
+  const [transactionList, setTransactionList] = useState([]);
+  useEffect(() => {
+    const transactionsRef = collection(db, "transactions");
+
+    const getTransactions = onSnapshot(transactionsRef, (snapshot) => {
+      let result = [];
+      snapshot.docs.map((doc) => {
+        result.push({ ...doc.data(), id: doc.id });
+      });
+      result?.sort(function (a, b) {
+        return a.timeStamp - b.timeStamp;
+      });
+
+      setTransactionList(result);
+    });
+
+    return () => getTransactions();
+  }, []);
+
+  const amounts = transactionList.map((transaction) => transaction.amount);
+  console.log(amounts);
+  const income = amounts
+    .filter((item) => item > 0)
+    .reduce((acc, item) => (acc += item), 0);
+  
+
+  const expense = amounts
+    .filter((item) => item < 0)
+    .reduce((acc, item) => (acc += item), 0);
+  
+
+  const total = amounts.reduce((acc, item) => (acc += item), 0);
 
   if (session) {
     return (
@@ -26,16 +51,22 @@ const Home = () => {
         <div className="bg-gray-200 min-h-screen space-y-6">
           <Header session={session} />
           <div className="w-full flex items-center justify-center">
-            <TotalBalance />
+            <TotalBalance total={total}/>
           </div>
+          <div className="w-full">
+            <Graph amounts={amounts}/>
+          </div>
+          <div className="flex justify-center items-center">
+            <p>Amount</p>
+            <p>(negative - expense, positive - income)</p>
+          </div>
+
           <div className="w-full flex items-center justify-center">
             <DataInput />
           </div>
-          <div className="space-y-1">
-            <Transactions />
+          <div className="pb-32">
+            <Transactions transactionList={transactionList} />
           </div>
-          
-          {/* <button onClick={addBook}>add</button> */}
         </div>
       </>
     );
